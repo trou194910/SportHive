@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../api/user.controller');
-const authMiddleware = require('../middleware/auth.middleware');
+const authMiddleware = require('../middleware/user.middleware');
 
 /**
  * @description 定义用户注册路由
