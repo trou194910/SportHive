@@ -32,8 +32,8 @@ class UserRepository {
      * @returns {Promise<Object>}
      */
     async createUser(username, email, passwordHash){
-        const query = 'INSERT INTO users (username, email, passwordHash) VALUES ($1, $2, $3) RETURNING id, username, email';
-        const values = [username, email, passwordHash];
+        const query = 'INSERT INTO users (username, email, passwordHash, permission) VALUES ($1, $2, $3, $4) RETURNING id, username, email';
+        const values = [username, email, passwordHash, 3];
         const { rows } = await db.query(query, values);
         return rows[0];
     }
