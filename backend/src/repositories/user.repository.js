@@ -2,6 +2,20 @@ const db = require('../config/db.config');
 
 class UserRepository {
     /**
+     * 创建新用户
+     * @param {string} username
+     * @param {string} email
+     * @param {string} passwordHash
+     * @returns {Promise<Object>}
+     */
+    async createUser(username, email, passwordHash){
+        const query = 'INSERT INTO users (username, email, passwordHash, permission) VALUES ($1, $2, $3, $4) RETURNING id, username, email';
+        const values = [username, email, passwordHash, 3];
+        const { rows } = await db.query(query, values);
+        return rows[0];
+    }
+
+    /**
      * 通过用户名查找用户
      * @param {string} username
      * @returns {Promise<Object|undefined>}
@@ -21,20 +35,6 @@ class UserRepository {
         if (!email) return undefined;
         const query = 'SELECT * FROM users WHERE email = $1';
         const { rows } = await db.query(query, [email]);
-        return rows[0];
-    }
-
-    /**
-     * 创建新用户
-     * @param {string} username
-     * @param {string} email
-     * @param {string} passwordHash
-     * @returns {Promise<Object>}
-     */
-    async createUser(username, email, passwordHash){
-        const query = 'INSERT INTO users (username, email, passwordHash, permission) VALUES ($1, $2, $3, $4) RETURNING id, username, email';
-        const values = [username, email, passwordHash, 3];
-        const { rows } = await db.query(query, values);
         return rows[0];
     }
 
