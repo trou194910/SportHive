@@ -24,7 +24,7 @@ class UserService {
     }
 
     /**
-     *
+     * 用户登录
      * @param {string} str 可能是用户名，也可能是邮箱
      * @param {string} password
      * @returns {Promise<object>}
@@ -66,6 +66,29 @@ class UserService {
                 email: user.email,
             },
         };
+    }
+
+    /**
+     * 用户删除
+     * @param {string} username
+     * @param {string} password
+     * @param {object} loggedUser
+     * @returns {Promise<void>}
+     */
+    async deleteUser(username, password, loggedUser) {
+        if (loggedUser.username !== username) {
+            throw new Error('无法删除他人账号');
+        }
+        const user = await userRepository.findUserByUsername(username);
+        if (!user) {
+            throw new Error('用户不存在');
+        }
+
+        const isMatch = await bcrypt.compare(password, user.passwordhash);
+        if (!isMatch) {
+            throw new Error('密码错误');
+        }
+        await userRepository.deleteUserByUsername(username);
     }
 }
 

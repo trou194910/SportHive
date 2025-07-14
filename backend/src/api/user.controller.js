@@ -43,6 +43,29 @@ class UserController {
             });
         }
     }
+
+    /**
+     * 处理用户删除请求
+     * @param {object} req 请求对象
+     * @param {object} res 响应对象
+     */
+    async deleteUser(req, res) {
+        try {
+            const { username, password } = req.body;
+            const loggedUser = req.user;
+            if (!username || !password) {
+                return res.status(400).json({ message: '请输入用户名和密码以确认删除操作' });
+            }
+            await userService.deleteUser(username, password, loggedUser);
+            res.status(200).json({
+                message: '删除成功'
+            })
+        } catch (error) {
+            return res.status(403).json({
+                message: error.message
+            })
+        }
+    }
 }
 
 module.exports = new UserController();

@@ -37,6 +37,15 @@ class UserRepository {
         const { rows } = await db.query(query, values);
         return rows[0];
     }
+
+    /**
+     * 通过用户名删除用户
+     * @param {string} username
+     */
+    async deleteUserByUsername(username) {
+        const query = 'DELETE FROM users WHERE username = $1';
+        await db.query(query, [username]);
+    }
 }
 
 module.exports = new UserRepository();
