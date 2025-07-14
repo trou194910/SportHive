@@ -21,6 +21,28 @@ class UserController {
             })
         }
     }
+
+    /**
+     * 处理用户登录请求
+     * @param {object} req 请求对象
+     * @param {object} res 响应对象
+     */
+    async login(req, res) {
+        try {
+            const { str, password } = req.body;
+            if (!str || !password) {
+                return res.status(400).json({
+                    message: '用户名和密码不能为空'
+                });
+            }
+            const user = await userService.login(str, password);
+            res.status(200).json(user);
+        } catch (error) {
+            res.status(401).json({
+                message: error.message
+            });
+        }
+    }
 }
 
 module.exports = new UserController();
