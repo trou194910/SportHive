@@ -10,7 +10,12 @@ class UserService {
      * @param {string} password
      */
     async register(username, email, password) {
-        // 检查用户名和邮箱是否存在
+        if (!/^[a-zA-Z0-9_]*$/.test(username)) {
+            throw new Error('用户名只能由字母、数字和下划线组成');
+        }
+        if (!/^[a-zA-Z0-9_]+@[a-zA-Z0-9_.-]+\.[a-zA-Z0-9_]{2,}$/.test(email)) {
+            throw new Error('请输入正确的邮箱');
+        }
         if (await userRepository.findUserByUsername(username))
             throw new Error('用户名已存在');
         if (await userRepository.findUserByEmail(email))
