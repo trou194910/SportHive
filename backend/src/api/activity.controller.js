@@ -5,17 +5,16 @@ class ActivityController {
      * 处理活动创建请求
      * @param {object} req 请求对象
      * @param {object} res 响应对象
+     * @param {function} next 错误处理
      */
-    async create(req, res) {
+    async create(req, res, next) {
         try {
             const activityData = req.body;
             const user = req.user;
             const newActivity = await activityService.createActivity(activityData, user);
             res.status(201).json(newActivity);
         } catch (error) {
-            res.status(400).json({
-                message: error.message
-            })
+            next(error);
         }
     }
 
@@ -23,15 +22,14 @@ class ActivityController {
      * 处理所有活动获取请求
      * @param {object} req 请求对象
      * @param {object} res 响应对象
+     * @param {function} next 错误处理
      */
-    async getAll(req, res) {
+    async getAll(req, res, next) {
         try {
             const activities = await activityService.getAllActivities();
             res.status(200).json(activities);
         } catch (error) {
-            res.status(401).json({
-                message: error.message
-            })
+            next(error);
         }
     }
 
@@ -39,16 +37,15 @@ class ActivityController {
      * 处理单个活动获取请求
      * @param {object} req 请求对象
      * @param {object} res 响应对象
+     * @param {function} next 错误处理
      */
-    async getById(req, res) {
+    async getById(req, res, next) {
         try {
             const id = req.params.id;
             const activity = await activityService.getActivityById(id);
             res.status(200).json(activity);
         } catch (error) {
-            res.status(401).json({
-                message: error.message
-            })
+            next(error);
         }
     }
 
@@ -56,8 +53,9 @@ class ActivityController {
      * 处理活动更新请求
      * @param {object} req 请求对象
      * @param {object} res 响应对象
+     * @param {function} next 错误处理
      */
-    async update(req, res) {
+    async update(req, res, next) {
         try {
             const id = req.params.id;
             const updateData = req.body;
@@ -65,9 +63,7 @@ class ActivityController {
             const updatedActivity = await activityService.updateActivityById(id, updateData, user);
             res.status(200).json(updatedActivity);
         } catch (error) {
-            res.status(401).json({
-                message: error.message
-            })
+            next(error);
         }
     }
 
@@ -75,8 +71,9 @@ class ActivityController {
      * 处理删除活动的请求
      * @param {object} req 请求对象
      * @param {object} res 响应对象
+     * @param {function} next 错误处理
      */
-    async delete(req, res) {
+    async delete(req, res, next) {
         try {
             const id = req.params.id;
             const user = req.user;
@@ -85,9 +82,7 @@ class ActivityController {
                 message: '删除成功'
             });
         } catch (error) {
-            res.status(403).json({
-                message: error.message
-            })
+            next(error);
         }
     }
 }

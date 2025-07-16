@@ -11,17 +11,26 @@ class UserService {
      */
     async register(username, email, password) {
         if (!/^[a-zA-Z0-9_]*$/.test(username)) {
-            throw new Error('用户名只能由字母、数字和下划线组成');
+            const error = new Error('用户名只能由字母、数字和下划线组成');
+            error.statusCode = 403;
+            throw error;
         }
-        if (!/^[a-zA-Z0-9_]+@[a-zA-Z0-9_.-]+\.[a-zA-Z0-9_]{2,}$/.test(email)) {
-            throw new Error('请输入正确的邮箱');
+        if (!/^[a-zA-Z0-9_]+@[a-zA-Z0-9_.-]+\.[a-zA-Z0-9]{2,}$/.test(email)) {
+            const error = new Error('请输入正确的邮箱');
+            error.statusCode = 403;
+            throw error;
         }
-        if (await userRepository.findUserByUsername(username))
-            throw new Error('用户名已存在');
-        if (await userRepository.findUserByEmail(email))
-            throw new Error('邮箱已被注册');
+        if (await userRepository.findUserByUsername(username)) {
+            const error = new Error('用户名已存在');
+            error.statusCode = 409;
+            throw error;
+        }
+        if (await userRepository.findUserByEmail(email)) {
+            const error = new Error('邮箱已被注册');
+            error.statusCode = 409;
+            throw error;
+        }
 
-        //密码加密存储
         const salt = await bcrypt.genSalt(10);
         const passwordHash = await bcrypt.hash(password, salt);
 
@@ -39,18 +48,24 @@ class UserService {
         if (str.includes("@")) {
             user = await userRepository.findUserByEmail(str);
             if (!user) {
-                throw new Error('邮箱不存在');
+                const error = new Error('邮箱不存在');
+                error.statusCode = 404;
+                throw error;
             }
         } else {
             user = await userRepository.findUserByUsername(str);
             if (!user) {
-                throw new Error('用户名不存在');
+                const error = new Error('用户名不存在');
+                error.statusCode = 404;
+                throw error;
             }
         }
 
         const isMatch = await bcrypt.compare(password, user.passwordhash);
         if (!isMatch) {
-            throw new Error('密码错误');
+            const error = new Error('密码错误');
+            error.statusCode = 401;
+            throw error;
         }
 
         const payload = {
@@ -82,16 +97,22 @@ class UserService {
      */
     async deleteUser(username, password, loggedUser) {
         if (loggedUser.username !== username) {
-            throw new Error('无法删除他人账号');
+            const error = new Error('无法删除他人账号');
+            error.statusCode = 403;
+            throw error;
         }
         const user = await userRepository.findUserByUsername(username);
         if (!user) {
-            throw new Error('用户不存在');
+            const error = new Error('用户不存在');
+            error.statusCode = 404;
+            throw error;
         }
 
         const isMatch = await bcrypt.compare(password, user.passwordhash);
         if (!isMatch) {
-            throw new Error('密码错误');
+            const error = new Error('密码错误');
+            error.statusCode = 401;
+            throw error;
         }
         await userRepository.deleteUserByUsername(username);
     }

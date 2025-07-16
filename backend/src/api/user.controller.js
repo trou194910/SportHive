@@ -5,8 +5,9 @@ class UserController {
      * 处理用户注册请求
      * @param {object} req 请求对象
      * @param {object} res 响应对象
+     * @param {function} next 错误处理
      */
-    async register(req, res) {
+    async register(req, res, next) {
         try {
             const { username, email, password } = req.body;
             const user = await userService.register(username, email, password);
@@ -15,10 +16,7 @@ class UserController {
                 data: user
             });
         } catch (error) {
-            console.error('注册过程中捕获到未处理的错误:', error);
-            res.status(400).json({
-                message: error.message
-            })
+            next(error);
         }
     }
 
@@ -26,8 +24,9 @@ class UserController {
      * 处理用户登录请求
      * @param {object} req 请求对象
      * @param {object} res 响应对象
+     * @param {function} next 错误处理
      */
-    async login(req, res) {
+    async login(req, res, next) {
         try {
             const { str, password } = req.body;
             if (!str || !password) {
@@ -38,9 +37,7 @@ class UserController {
             const user = await userService.login(str, password);
             res.status(200).json(user);
         } catch (error) {
-            res.status(401).json({
-                message: error.message
-            });
+            next(error);
         }
     }
 
@@ -48,22 +45,23 @@ class UserController {
      * 处理用户删除请求
      * @param {object} req 请求对象
      * @param {object} res 响应对象
+     * @param {function} next 错误处理
      */
-    async deleteUser(req, res) {
+    async deleteUser(req, res, next) {
         try {
             const { username, password } = req.body;
             const loggedUser = req.user;
             if (!username || !password) {
-                return res.status(400).json({ message: '请输入用户名和密码以确认删除操作' });
+                return res.status(400).json({
+                    message: '请输入用户名和密码以确认删除操作'
+                });
             }
             await userService.deleteUser(username, password, loggedUser);
-            res.status(200).json({
+            res.status(204).json({
                 message: '删除成功'
             })
         } catch (error) {
-            return res.status(403).json({
-                message: error.message
-            })
+            next(error);
         }
     }
 }
