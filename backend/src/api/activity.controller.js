@@ -53,6 +53,21 @@ class ActivityController {
     }
 
     /**
+     * 处理某个用户创建的活动获取请求
+     * @param {object} req 请求对象
+     * @param {object} res 响应对象
+     * @param {function} next 错误处理
+     */
+    async getByOrganizerId(req, res, next) {
+        try {
+            const activities = await activityService.getActivitiesByOrganizerId(req.params.id);
+            res.status(200).json(activities);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    /**
      * 处理活动更新请求
      * @param {object} req 请求对象
      * @param {object} res 响应对象

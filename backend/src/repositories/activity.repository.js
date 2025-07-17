@@ -43,6 +43,17 @@ class ActivityRepository {
     }
 
     /**
+     * 通过 organizerId 查找活动
+     * @param {number} id
+     * @returns {Promise<Array<Object>>}
+     */
+    async findActivityByOrganizerId(id) {
+        const query = 'SELECT * FROM activities WHERE organizer_id = $1';
+        const result = await db.query(query, [id]);
+        return result.rows;
+    }
+
+    /**
      * 通过 ID 更新活动
      * @param {number} id
      * @param {object} activityData

@@ -47,6 +47,15 @@ class ActivityService {
     }
 
     /**
+     * 某个用户创建的活动的获取
+     * @param {number} id
+     * @returns {Promise<Array<object>>}
+     */
+    async getActivitiesByOrganizerId(id) {
+        return await activityRepository.findActivityByOrganizerId(id);
+    }
+
+    /**
      * 活动更新
      * @param {number} id
      * @param {object} updateData
@@ -55,9 +64,6 @@ class ActivityService {
      */
     async updateActivityById(id, updateData, user) {
         const activity = await this.getActivityById(id);
-        console.log(activity.organizer_id);
-        console.log(user.id);
-        console.log(user.permission);
         if (activity.organizer_id !== user.id && user.permission < 4) {
             const error = new Error('您没有权限更改活动内容');
             error.statusCode = 403;

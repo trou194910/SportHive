@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../api/user.controller');
+const activitiesController = require('../api/activity.controller');
 const commentController = require('../api/comment.controller');
 const authMiddleware = require('../middleware/user.middleware');
 
@@ -27,5 +28,11 @@ router.delete('/:id', authMiddleware, userController.deleteUser);
  * @method GET /api/users/:id/comments
  */
 router.get('/:id/comments', authMiddleware, commentController.getByUser);
+
+/**
+ * @description 获取某个用户创建的活动
+ * @method GET /api/users/:id/activities/create
+ */
+router.get('/:id/activities/create', activitiesController.getByOrganizerId);
 
 module.exports = router;
