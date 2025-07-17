@@ -9,10 +9,9 @@ class CommentController {
      */
     async create(req, res, next) {
         try {
-            const { activityId } = req.params;
+            const { id } = req.params;
             const { content } = req.body;
-            const userId = Number(req.user.id);
-            const newComment = await commentService.createComment(activityId, content, userId);
+            const newComment = await commentService.createComment(id, content, req.user);
             res.status(201).json({
                 message: '评论创建成功',
                 data: newComment
@@ -30,8 +29,8 @@ class CommentController {
      */
     async getByActivity(req, res, next) {
         try {
-            const { activityId } = req.params;
-            const comments = await commentService.getCommentsByActivityId(Number(activityId));
+            const { id } = req.params;
+            const comments = await commentService.getCommentsByActivityId(Number(id));
             res.status(200).json(comments);
         } catch (error) {
             next(error);
@@ -46,8 +45,8 @@ class CommentController {
      */
     async getByUser(req, res, next) {
         try {
-            const { userId } = req.params;
-            const comments = await commentService.getCommentsByUserId(Number(userId));
+            const { id } = req.params;
+            const comments = await commentService.getCommentsByUserId(Number(id));
             res.status(200).json(comments);
         } catch (error) {
             next(error);
@@ -63,10 +62,10 @@ class CommentController {
      */
     async updateComment(req, res, next) {
         try {
-            const { commentId } = req.params;
+            const { id } = req.params;
             const { content } = req.body;
             const user = req.user;
-            const updatedComment = await commentService.updateComment(Number(commentId), content, user);
+            const updatedComment = await commentService.updateComment(Number(id), content, user);
             res.status(200).json({
                 message: '评论更新成功',
                 data: updatedComment
@@ -84,10 +83,9 @@ class CommentController {
      */
     async deleteComment(req, res, next) {
         try {
-            const { commentId } = req.params;
+            const { id } = req.params;
             const user = req.user;
-
-            await commentService.deleteComment(Number(commentId), user);
+            await commentService.deleteComment(Number(id), user);
             res.status(204).json({
                 message: '评论删除成功'
             });

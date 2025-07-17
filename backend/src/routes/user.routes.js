@@ -26,6 +26,6 @@ router.delete('/:id', authMiddleware, userController.deleteUser);
  * @description 获取某个用户的所有评论
  * @method GET /api/users/:id/comments
  */
-router.get('/:id/comments', authMiddleware, commentController.getByActivity);
+router.get('/:id/comments', authMiddleware, commentController.getByUser);
 
 module.exports = router;

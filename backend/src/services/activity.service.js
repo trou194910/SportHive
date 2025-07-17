@@ -55,6 +55,9 @@ class ActivityService {
      */
     async updateActivityById(id, updateData, user) {
         const activity = await this.getActivityById(id);
+        console.log(activity.organizer_id);
+        console.log(user.id);
+        console.log(user.permission);
         if (activity.organizer_id !== user.id && user.permission < 4) {
             const error = new Error('您没有权限更改活动内容');
             error.statusCode = 403;

@@ -71,6 +71,7 @@ class UserService {
         const payload = {
             id: user.id,
             username: user.username,
+            permission: user.permission
         };
         const secret = process.env.JWT_SECRET;
         const token = jwt.sign(payload, secret, {
@@ -84,6 +85,7 @@ class UserService {
                 id: user.id,
                 username: user.username,
                 email: user.email,
+                permission: user.permission
             },
         };
     }

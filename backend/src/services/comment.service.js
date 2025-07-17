@@ -67,7 +67,7 @@ class CommentService {
             error.statusCode = 404;
             throw error;
         }
-        if (comment.user_id !== user.id) {
+        if (comment.user_id !== (Number)(user.id)) {
             const error = new Error('您没有权限修改此评论');
             error.statusCode = 403;
             throw error;
@@ -88,7 +88,7 @@ class CommentService {
             error.statusCode = 404;
             throw error;
         }
-        if (comment.user_id !== user.id && user.permission < 4) {
+        if (comment.user_id !== (Number)(user.id) && user.permission < 4) {
             const error = new Error('您没有权限删除此评论');
             error.statusCode = 403;
             throw error;
