@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const activityController = require('../api/activity.controller.js');
+const commentController = require('../api/comment.controller.js');
 const authMiddleware = require('../middleware/user.middleware'); // 引入你的认证中间件
 
 /**
@@ -22,7 +23,7 @@ router.get('/:id', activityController.getById);
 router.post('/', authMiddleware, activityController.create);
 
 /**
- * @description 定义活动更新由
+ * @description 定义活动更新路由
  * @method PUT /api/activities/:id
  */
 router.put('/:id', authMiddleware, activityController.update);
@@ -32,5 +33,17 @@ router.put('/:id', authMiddleware, activityController.update);
  * @method DELETE /api/activities/:id
  */
 router.delete('/:id', authMiddleware, activityController.delete);
+
+/**
+ * @description 获取某个活动的所有评论
+ * @method GET /api/activities/:id/comments
+ */
+router.get('/:id/comments', commentController.getByActivity);
+
+/**
+ * @description 在某个活动下创建评论 (需要认证)
+ * @method POST /api/activities/:id/comments
+ */
+router.post('/:id/comments', authMiddleware, commentController.create);
 
 module.exports = router;

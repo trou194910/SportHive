@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../api/user.controller');
+const commentController = require('../api/comment.controller');
 const authMiddleware = require('../middleware/user.middleware');
 
 /**
@@ -20,5 +21,11 @@ router.post('/login', userController.login);
  * @method DELETE /api/users/:id
  */
 router.delete('/:id', authMiddleware, userController.deleteUser);
+
+/**
+ * @description 获取某个用户的所有评论
+ * @method GET /api/users/:id/comments
+ */
+router.get('/:id/comments', authMiddleware, commentController.getByActivity);
 
 module.exports = router;

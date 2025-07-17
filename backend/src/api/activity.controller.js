@@ -12,7 +12,10 @@ class ActivityController {
             const activityData = req.body;
             const user = req.user;
             const newActivity = await activityService.createActivity(activityData, user);
-            res.status(201).json(newActivity);
+            res.status(201).json({
+                message: '活动创建成功',
+                data: newActivity
+            });
         } catch (error) {
             next(error);
         }
