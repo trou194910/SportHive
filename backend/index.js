@@ -6,9 +6,7 @@ const errorHandler = require('./src/middleware/errorHandler');
 const app = express();
 
 app.use(express.json());
-
 app.use('/api', mainRouter);
-
 app.use(errorHandler);
 
 const PORT = 3000;

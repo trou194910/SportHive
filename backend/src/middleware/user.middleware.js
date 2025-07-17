@@ -12,7 +12,6 @@ function userMiddleware(req, res, next) {
             return res.status(403).json({ message: '令牌无效或已过期' });
         }
         req.user = userPayload;
-        console.log(userPayload);
         next();
     });
 }

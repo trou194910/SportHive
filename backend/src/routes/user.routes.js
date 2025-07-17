@@ -3,6 +3,7 @@ const router = express.Router();
 const userController = require('../api/user.controller');
 const activitiesController = require('../api/activity.controller');
 const commentController = require('../api/comment.controller');
+const registrationController = require('../api/registration.controller');
 const authMiddleware = require('../middleware/user.middleware');
 
 /**
@@ -34,5 +35,11 @@ router.get('/:id/comments', authMiddleware, commentController.getByUser);
  * @method GET /api/users/:id/activities/create
  */
 router.get('/:id/activities/create', activitiesController.getByOrganizerId);
+
+/**
+ * @description 获取用户已报名列表路由
+ * @method GET api/users/registrations
+ */
+router.get('/registrations', authMiddleware, registrationController.getRegisteredActivities);
 
 module.exports = router;

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const activityController = require('../api/activity.controller.js');
 const commentController = require('../api/comment.controller.js');
+const registrationController = require('../api/registration.controller.js');
 const authMiddleware = require('../middleware/user.middleware'); // 引入你的认证中间件
 
 /**
@@ -45,5 +46,17 @@ router.get('/:id/comments', commentController.getByActivity);
  * @method POST /api/activities/:id/comments
  */
 router.post('/:id/comments', authMiddleware, commentController.create);
+
+/**
+ * @description 报名活动路由
+ * @method POST api/activities/:id/register
+ */
+router.post('/:id/register', authMiddleware, registrationController.register);
+
+/**
+ * @description 取消报名活动路由
+ * @method DELETE api/activities/:id/cancel
+ */
+router.delete('/:id/cancel', authMiddleware, registrationController.withdraw);
 
 module.exports = router;

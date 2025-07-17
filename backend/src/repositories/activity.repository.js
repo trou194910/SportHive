@@ -54,15 +54,37 @@ class ActivityRepository {
     }
 
     /**
-     * 通过 ID 更新活动
+     * 通过 ID 更新活动内容
      * @param {number} id
      * @param {object} activityData
      * @returns {Promise<object>}
      */
-    async updateActivityById(id, {name, condition, type, description, location, startTime, endTime, capacity}) {
-        const query = 'UPDATE activities SET name = $1, condition = $2, type = $3, description = $4, location = $5, start_time = $6, end_time = $7, capacity = $8 WHERE id = $9 RETURNING *';
-        const values = [name, condition, type, description, location, startTime, endTime, capacity, id];
+    async updateActivityById(id, {name, type, description, location, startTime, endTime, capacity}) {
+        const query = 'UPDATE activities SET name = $1, type = $2, description = $3, location = $4, start_time = $5, end_time = $6, capacity = $7 WHERE id = $8 RETURNING *';
+        const values = [name, type, description, location, startTime, endTime, capacity, id];
         const result = await db.query(query, values);
+        return result.rows[0];
+    }
+
+    /**
+     * 通过 ID 增加参与人数
+     * @param {number} id
+     * @returns {Promise<object>}
+     */
+    async addParticipants(id) {
+        const query = 'UPDATE activities SET participants = participants+1 WHERE id = $1 RETURNING *';
+        const result = await db.query(query, [id]);
+        return result.rows[0];
+    }
+
+    /**
+     * 通过 ID 减少参与人数
+     * @param {number} id
+     * @returns {Promise<object>}
+     */
+    async decParticipants(id) {
+        const query = 'UPDATE activities SET participants = participants-1 WHERE id = $1 RETURNING *';
+        const result = await db.query(query, [id]);
         return result.rows[0];
     }
 
