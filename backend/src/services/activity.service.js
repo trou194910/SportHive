@@ -40,7 +40,7 @@ class ActivityService {
         const activity = await activityRepository.findActivityById(id);
         if (!activity) {
             const error = new Error('活动未找到');
-            error.statusCode = 404;
+            error.status = 404;
             throw error;
         }
         return activity;
@@ -66,7 +66,7 @@ class ActivityService {
         const activity = await this.getActivityById(id);
         if (activity.organizer_id !== user.id && user.permission < 4) {
             const error = new Error('您没有权限更改活动内容');
-            error.statusCode = 403;
+            error.status = 403;
             throw error;
         }
         return await activityRepository.updateActivityById(id, updateData);
@@ -81,7 +81,7 @@ class ActivityService {
         const activity = await this.getActivityById(id);
         if (activity.organizer_id !== user.id && user.permission < 4) {
             const error = new Error('您没有权限删除活动');
-            error.statusCode = 403;
+            error.status = 403;
             throw error;
         }
         await activityRepository.deleteActivityById(id);
@@ -93,11 +93,9 @@ class ActivityService {
      * @returns {Promise<Array<object>>}
      */
     async searchActivities(searchCriteria) {
-        // 在这里可以添加业务逻辑，例如验证输入、权限检查等
         try {
             return await activityRepository.findActivities(searchCriteria);
         } catch (error) {
-            // 向上层抛出错误，由 Controller 处理
             throw error;
         }
     }

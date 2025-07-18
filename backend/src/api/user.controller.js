@@ -77,6 +77,78 @@ class UserController {
     }
 
     /**
+     * 处理关注用户请求
+     * @param {object} req 请求对象
+     * @param {object} res 响应对象
+     * @param {function} next 错误处理
+     */
+    async follow(req, res, next) {
+        try {
+            const user = req.user;
+            const followId = Number(req.params.id);
+            const result = await userService.followUser(user, followId);
+            res.status(200).json({
+                message: "关注成功",
+                data: result
+            })
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    /**
+     * 处理取关用户请求
+     * @param {object} req 请求对象
+     * @param {object} res 响应对象
+     * @param {function} next 错误处理
+     */
+    async unfollow(req, res, next) {
+        try {
+            const user = req.user;
+            const followId = Number(req.params.id);
+            const result = await userService.unfollowUser(user, followId);
+            res.status(200).json({
+                message: "取关成功",
+                data: result
+            })
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    /**
+     * 处理获取关注用户所有活动请求
+     * @param {object} req 请求对象
+     * @param {object} res 响应对象
+     * @param {function} next 错误处理
+     */
+    async getFollowedActivities(req, res, next) {
+        try {
+            const user = req.user;
+            const activities = await userService.getFollowedUsersActivities(user);
+            res.status(200).json(activities);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    /**
+     * 处理获取关注用户列表请求
+     * @param {object} req 请求对象
+     * @param {object} res 响应对象
+     * @param {function} next 错误处理
+     */
+    async getFollows(req, res, next) {
+        try {
+            const user = req.user;
+            const users = await userService.getFollows(user);
+            res.status(200).json(users);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    /**
      * 处理用户删除请求
      * @param {object} req 请求对象
      * @param {object} res 响应对象

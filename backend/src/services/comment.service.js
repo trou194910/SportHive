@@ -17,13 +17,13 @@ class CommentService {
         }
         if (!content || content.trim() === '') {
             const error = new Error('评论内容不能为空');
-            error.statusCode = 400;
+            error.status = 400;
             throw error;
         }
         const activity = await activityRepository.findActivityById(activityId);
         if (!activity) {
             const error = new Error('评论的活动不存在');
-            error.statusCode = 404;
+            error.status = 404;
             throw error;
         }
         return await commentRepository.createComment(activityId, user.id, content.trim());
@@ -38,7 +38,7 @@ class CommentService {
         const activity = await activityRepository.findActivityById(activityId);
         if (!activity) {
             const error = new Error('查询评论的活动不存在');
-            error.statusCode = 404;
+            error.status = 404;
             throw error;
         }
         return await commentRepository.findCommentByActivityId(activityId);
@@ -63,18 +63,18 @@ class CommentService {
     async updateComment(commentId, newContent, user) {
         if (!newContent || newContent.trim() === '') {
             const error = new Error('评论内容不能为空');
-            error.statusCode = 400;
+            error.status = 400;
             throw error;
         }
         const comment = await commentRepository.findCommentById(commentId);
         if (!comment) {
             const error = new Error('评论未找到');
-            error.statusCode = 404;
+            error.status = 404;
             throw error;
         }
         if (comment.user_id !== (Number)(user.id)) {
             const error = new Error('您没有权限修改此评论');
-            error.statusCode = 403;
+            error.status = 403;
             throw error;
         }
         return await commentRepository.updateCommentById(commentId, newContent.trim());
@@ -90,12 +90,12 @@ class CommentService {
         const comment = await commentRepository.findCommentById(commentId);
         if (!comment) {
             const error = new Error('评论未找到');
-            error.statusCode = 404;
+            error.status = 404;
             throw error;
         }
         if (comment.user_id !== (Number)(user.id) && user.permission < 4) {
             const error = new Error('您没有权限删除此评论');
-            error.statusCode = 403;
+            error.status = 403;
             throw error;
         }
         await commentRepository.deleteCommentById(commentId);

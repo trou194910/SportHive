@@ -22,7 +22,7 @@ class RegistrationService {
         }
         if (user.permission < 2) {
             const error = new Error('您没有权限报名活动');
-            error.statusCode = 403;
+            error.status = 403;
             throw error;
         }
         const isRegister = await registrationRepository.findRegistrationByUserAndActivity(user.id, activityId);
