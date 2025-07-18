@@ -42,6 +42,41 @@ class UserController {
     }
 
     /**
+     * @param {object} req 请求对象
+     * @param {object} res 响应对象
+     * @param {function} next 错误处理
+     */
+    async changePermission(req, res, next) {
+        try {
+            const loggedUser = req.user;
+            const userId = req.params.id;
+            const { newPermission } = req.body;
+            const changedUser = await userService.changPermission(Number(userId), Number(newPermission), loggedUser);
+            res.status(200).json({
+                message: "权限修改成功",
+                data: changedUser
+            })
+        } catch (error) {
+            next(error);
+        }
+    }
+    /**
+     * 处理获取用户列表请求
+     * @param {object} req 请求对象
+     * @param {object} res 响应对象
+     * @param {function} next 错误处理
+     */
+    async getAllUsers(req, res, next) {
+        try {
+            const loggedUsers = req.user;
+            const users = await userService.getAllUsers(loggedUsers);
+            res.status(200).json(users);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    /**
      * 处理用户删除请求
      * @param {object} req 请求对象
      * @param {object} res 响应对象

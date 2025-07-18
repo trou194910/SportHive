@@ -77,7 +77,6 @@ class UserService {
         const token = jwt.sign(payload, secret, {
             expiresIn: '1h',
         });
-
         return {
             message: '登陆成功',
             token: token,
@@ -88,6 +87,36 @@ class UserService {
                 permission: user.permission
             },
         };
+    }
+
+    /**
+     * 用户权限修改
+     * @param {number} userId
+     * @param {number} newPermission
+     * @param {object} loggedUser
+     * @returns {Promise<void>}
+     */
+    async changPermission(userId, newPermission, loggedUser) {
+        if (loggedUser.permission < 4 || loggedUser.permission <= newPermission) {
+            const error = new Error('您没有权限完成此改变工作');
+            error.statusCode = 403;
+            throw error;
+        }
+        return await userRepository.changePermission(newPermission, userId);
+    }
+
+    /**
+     * 获取用户列表
+     * @param {object} loggedUser
+     * @returns {Promise<Array<object>>}
+     */
+    async getAllUsers(loggedUser) {
+        if (loggedUser.permission < 4) {
+            const error = new Error('您没有权限查看用户列表');
+            error.statusCode = 403;
+            throw error;
+        }
+        return await userRepository.getAllUsers();
     }
 
     /**

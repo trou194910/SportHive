@@ -10,6 +10,11 @@ class CommentService {
      * @returns {Promise<object>}
      */
     async createComment(activityId, content, user) {
+        if (user.permission < 2) {
+            const error = new Error('您没有权限评论');
+            error.status = 403;
+            throw error;
+        }
         if (!content || content.trim() === '') {
             const error = new Error('评论内容不能为空');
             error.statusCode = 400;

@@ -18,16 +18,16 @@ router.get('/search', activityController.searchActivities);
 router.get('/', activityController.getAll);
 
 /**
- * @description 定义单个活动查找路由
- * @method GET /api/activities/:id
- */
-router.get('/:id', activityController.getById);
-
-/**
  * @description 定义活动创建路由
  * @method POST /api/activities
  */
 router.post('/', authMiddleware, activityController.create);
+
+/**
+ * @description 定义单个活动查找路由
+ * @method GET /api/activities/:id
+ */
+router.get('/:id', activityController.getById);
 
 /**
  * @description 定义活动更新路由
