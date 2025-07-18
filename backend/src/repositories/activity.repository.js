@@ -96,6 +96,57 @@ class ActivityRepository {
         const query = 'DELETE FROM activities WHERE id = $1';
         await db.query(query, [id]);
     }
+
+    /**
+     * 根据动态查询条件查找活动
+     * @param {object} queryOptions
+     * @returns {Promise<Array<object>>}
+     */
+    async findActivities(queryOptions) {
+        const { searchText, name, description, type } = queryOptions;
+
+        let baseQuery = 'SELECT * FROM activities';
+        const conditions = [];
+        const params = [];
+
+        // 1. 全文（不完全匹配）查找
+        if (searchText) {
+            params.push(`%${searchText}%`);
+            conditions.push(`(name ILIKE $${params.length} OR description ILIKE $${params.length})`);
+        }
+
+        // 2. 按标题（不完全匹配）查找
+        if (name && !searchText) {
+            params.push(`%${name}%`);
+            conditions.push(`name ILIKE $${params.length}`);
+        }
+
+        // 3. 按正文（不完全匹配）查找
+        if (description && !searchText) {
+            params.push(`%${description}%`);
+            conditions.push(`description ILIKE $${params.length}`);
+        }
+
+        // 4. 分类（完全匹配）查找
+        if (type) {
+            params.push(type);
+            conditions.push(`type = $${params.length}`);
+        }
+
+        if (conditions.length > 0) {
+            baseQuery += ' WHERE ' + conditions.join(' AND ');
+        }
+        baseQuery += ' ORDER BY start_time DESC';
+        try {
+            console.log('Executing Query:', baseQuery);
+            console.log('With Params:', params);
+            const { rows } = await db.query(baseQuery, params);
+            return rows;
+        } catch (error) {
+            console.error('Repository Error: Failed to find activities.', error);
+            throw new Error('数据库查询活动失败');
+        }
+    }
 }
 
 module.exports = new ActivityRepository();

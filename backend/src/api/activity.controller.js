@@ -103,6 +103,31 @@ class ActivityController {
             next(error);
         }
     }
+
+    /**
+     * 处理活动搜索请求
+     * @param {object} req 请求对象
+     * @param {object} res 响应对象
+     * @param {function} next 错误处理
+     */
+    async searchActivities(req, res, next) {
+        try {
+            const { searchText, name, description, type } = req.query;
+            const activities = await activityService.searchActivities({
+                searchText,
+                name,
+                description,
+                type,
+            });
+            res.status(200).json({
+                success: true,
+                count: activities.length,
+                data: activities,
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
 }
 
 module.exports = new ActivityController();

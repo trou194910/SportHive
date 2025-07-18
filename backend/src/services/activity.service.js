@@ -86,6 +86,21 @@ class ActivityService {
         }
         await activityRepository.deleteActivityById(id);
     }
+
+    /**
+     * 搜索活动
+     * @param {object} searchCriteria
+     * @returns {Promise<Array<object>>}
+     */
+    async searchActivities(searchCriteria) {
+        // 在这里可以添加业务逻辑，例如验证输入、权限检查等
+        try {
+            return await activityRepository.findActivities(searchCriteria);
+        } catch (error) {
+            // 向上层抛出错误，由 Controller 处理
+            throw error;
+        }
+    }
 }
 
 module.exports = new ActivityService();

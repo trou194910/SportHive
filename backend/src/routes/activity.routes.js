@@ -6,6 +6,12 @@ const registrationController = require('../api/registration.controller.js');
 const authMiddleware = require('../middleware/user.middleware'); // 引入你的认证中间件
 
 /**
+ * @description 活动搜索路由
+ * @method GET api/activities/search
+ */
+router.get('/search', activityController.searchActivities);
+
+/**
  * @description 定义所有活动查找路由
  * @method GET /api/activities
  */
