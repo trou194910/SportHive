@@ -36,6 +36,12 @@ router.get('/:id', activityController.getById);
 router.put('/:id', authMiddleware, activityController.update);
 
 /**
+ * @description 定义活动审核路由
+ * @method PUT /api/activities/:id/pass
+ */
+router.put('/:id/pass', authMiddleware, activityController.pass);
+
+/**
  * @description 定义活动删除路由
  * @method DELETE /api/activities/:id
  */

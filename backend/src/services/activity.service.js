@@ -73,6 +73,27 @@ class ActivityService {
     }
 
     /**
+     * 活动审核
+     * @param {number} id
+     * @param {object} user
+     * @returns {Promise<object>}
+     */
+    async passActivity(id, user) {
+        if (user.permission < 4) {
+            const error = new Error('您没有权限更改活动状态');
+            error.status = 403;
+            throw error;
+        }
+        const activity = await this.getActivityById(id);
+        if (activity.condition !== 1) {
+            const error = new Error('该状态不可修改');
+            error.status = 409;
+            throw error;
+        }
+        return await activityRepository.passActivity(id);
+    }
+
+    /**
      * 活动删除
      * @param {number} id
      * @param {object} user

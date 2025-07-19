@@ -60,10 +60,21 @@ class ActivityRepository {
      * @returns {Promise<object>}
      */
     async updateActivityById(id, {name, type, description, location, startTime, endTime, capacity}) {
-        const query = 'UPDATE activities SET name = $1, type = $2, description = $3, location = $4, start_time = $5, end_time = $6, capacity = $7 WHERE id = $8 RETURNING *';
+        const query = 'UPDATE activities SET name = $1, type = $2, description = $3, location = $4, start_time = $5, end_time = $6, capacity = $7, condition = 1 WHERE id = $8 RETURNING *';
         const values = [name, type, description, location, startTime, endTime, capacity, id];
         const result = await db.query(query, values);
         return result.rows[0];
+    }
+
+    /**
+     * 通过活动审核
+     * @param {number} id
+     * @returns {Promise<object>}
+     */
+    async passActivity(id) {
+        const query = 'UPDATE activities SET condition = 2 WHERE id = $1 RETURNING *';
+        const { rows } = await db.query(query, [id]);
+        return rows[0];
     }
 
     /**
@@ -145,6 +156,21 @@ class ActivityRepository {
         } catch (error) {
             console.error('Repository Error: Failed to find activities.', error);
             throw new Error('数据库查询活动失败');
+        }
+    }
+
+    /**
+     * [自动任务] 更新所有已过期的活动状态为 3
+     * @returns {Promise<number>} 返回被更新的行数
+     */
+    async updateExpiredActivities() {
+        const query = 'UPDATE activities SET condition = 3 WHERE start_time < NOW() AND condition != 3';
+        try {
+            const { rowCount } = await db.query(query);
+            return rowCount;
+        } catch (error) {
+            console.error('Repository Error: Failed to update expired activities.', error);
+            throw error;
         }
     }
 }

@@ -86,6 +86,26 @@ class ActivityController {
     }
 
     /**
+     * 处理活动审核通过请求
+     * @param {object} req 请求对象
+     * @param {object} res 响应对象
+     * @param {function} next 错误处理
+     */
+    async pass(req, res, next) {
+        try {
+            const id = req.params.id;
+            const user = req.user;
+            const activity = await activityService.passActivity(Number(id), user);
+            res.status(200).json({
+                message: "审核通过",
+                data: activity
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    /**
      * 处理删除活动的请求
      * @param {object} req 请求对象
      * @param {object} res 响应对象
