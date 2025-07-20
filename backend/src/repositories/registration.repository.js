@@ -44,7 +44,7 @@ class RegistrationRepository {
      * @return {Promise<Array<object>>}
      */
     async findActivitiesByUserId(userId) {
-        const query = 'SELECT a.id AS activity_id, a.name AS activity_name, a.description, a.location, a.start_time, a.end_time, a.capacity, a.organizer_id, r.registration_time FROM registrations AS r JOIN activities AS a ON r.activity_id = a.id WHERE r.user_id = $1';
+        const query = 'SELECT a.id AS activity_id, a.name AS activity_name, a.id, a.name, a.description, a.type, a.location, a.start_time, a.end_time, a.condition, a.capacity, a.organizer_id, r.registration_time FROM registrations AS r JOIN activities AS a ON r.activity_id = a.id WHERE r.user_id = $1';
         const result = await db.query(query, [userId]);
         return result.rows;
     }

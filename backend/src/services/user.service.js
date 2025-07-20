@@ -10,6 +10,11 @@ class UserService {
      * @param {string} password
      */
     async register(username, email, password) {
+        if (password.length < 8) {
+            const error = new Error('密码过短');
+            error.status = 403;
+            throw error;
+        }
         if (!/^[a-zA-Z0-9_]*$/.test(username)) {
             const error = new Error('用户名只能由字母、数字和下划线组成');
             error.status = 403;
