@@ -3,7 +3,7 @@ const router = express.Router();
 const activityController = require('../api/activity.controller.js');
 const commentController = require('../api/comment.controller.js');
 const registrationController = require('../api/registration.controller.js');
-const authMiddleware = require('../middleware/user.middleware'); // 引入你的认证中间件
+const authMiddleware = require('../middleware/user.middleware');
 
 /**
  * @description 活动搜索路由
@@ -52,6 +52,12 @@ router.delete('/:id', authMiddleware, activityController.delete);
  * @method GET /api/activities/:id/comments
  */
 router.get('/:id/comments', commentController.getByActivity);
+
+/**
+ * @description 获取活动的报名用户
+ * @method GET /api/activities/:id/registration
+ */
+router.get('/:id/registration', registrationController.findUsersByActivityId);
 
 /**
  * @description 在某个活动下创建评论 (需要认证)

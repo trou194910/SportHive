@@ -96,6 +96,15 @@ class UserService {
     }
 
     /**
+     * 通过 ID 查找用户
+     * @param {number} id
+     * @returns {Promise<object>}
+     */
+    async findUserById(id) {
+        return await userRepository.findUserById(id);
+    }
+
+    /**
      * 用户权限修改
      * @param {number} userId
      * @param {number} newPermission

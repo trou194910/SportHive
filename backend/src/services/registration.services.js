@@ -65,6 +65,15 @@ class RegistrationService {
     async getRegisteredActivity(userId) {
         return await registrationRepository.findActivitiesByUserId(userId);
     }
+
+    /**
+     * 根据活动ID查找所有报名用户的信息
+     * @param {number} activityId
+     * @return {Promise<Array<object>>}
+     */
+    async findUsersByActivityId(activityId) {
+        return await registrationRepository.findUsersByActivityId(activityId);
+    }
 }
 
 module.exports = new RegistrationService();

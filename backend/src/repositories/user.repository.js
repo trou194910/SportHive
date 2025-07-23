@@ -129,7 +129,7 @@ class UserRepository {
      * @returns {Promise<Array<object>>}
      */
     async getFollows(user) {
-        const query = 'SELECT id, username, permission FROM users WHERE id = ANY($1::bigint[]) ORDER BY username DESC';
+        const query = 'SELECT id, username, permission, email FROM users WHERE id = ANY($1::bigint[]) ORDER BY username DESC';
         const { rows } = await db.query(query, [user.follows]);
         return rows;
     }

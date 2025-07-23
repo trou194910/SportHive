@@ -25,6 +25,18 @@ router.post('/login', userController.login);
 router.get('/registrations', authMiddleware, registrationController.getRegisteredActivities);
 
 /**
+ * @decription 定义获取关注用户列表路由
+ * @method GET /api/users/follows
+ */
+router.get('/follows', authMiddleware, userController.getFollows);
+
+/**
+ * @description 定义获取已关注的用户发布的所有活动的路由
+ * @method GET /api/users/follows/activities
+ */
+router.get('/follows/activities', authMiddleware, userController.getFollowedActivities);
+
+/**
  * @description 获取用户列表(管理员)
  * @method GET api/users/user_management
  */
@@ -35,6 +47,12 @@ router.get('/user_management', authMiddleware, userController.getAllUsers);
  * @method PUT api/users/user_management/:id
  */
 router.put('/user_management/:id', authMiddleware, userController.changePermission);
+
+/**
+ * @description 定义查找用户路由
+ * @method GET /api/users/:id
+ */
+router.get('/:id', authMiddleware, userController.findUser);
 
 /**
  * @description 定义用户删除路由
@@ -55,27 +73,15 @@ router.get('/:id/comments', authMiddleware, commentController.getByUser);
 router.get('/:id/activities/create', activitiesController.getByOrganizerId);
 
 /**
- * @decription 定义获取关注用户列表路由
- * @method GET /api/user/follows
- */
-router.get('/follows', authMiddleware, userController.getFollows);
-
-/**
  * @description 定义关注用户路由
- * @method POST /api/user/follows/:id
+ * @method POST /api/users/follows/:id
  */
 router.post('/follows/:id', authMiddleware, userController.follow);
 
 /**
  * @description 定义取关用户路由
- * @method DELETE /api/user/follows/:id
+ * @method DELETE /api/users/follows/:id
  */
 router.delete('/follows/:id', authMiddleware, userController.unfollow);
-
-/**
- * @description 定义获取已关注的用户发布的所有活动的路由
- * @method GET /api/user/follows/activities
- */
-router.get('/follows/activities', authMiddleware, userController.getFollowedActivities);
 
 module.exports = router;

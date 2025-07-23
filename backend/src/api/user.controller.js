@@ -42,6 +42,26 @@ class UserController {
     }
 
     /**
+     * 处理 ID 查找请求
+     * @param {object} req 请求对象
+     * @param {object} res 响应对象
+     * @param {function} next 错误处理
+     */
+    async findUser(req, res, next) {
+        try {
+            const id = Number(req.params.id);
+            const user = await userService.findUserById(id);
+            res.status(200).json({
+                message: "查找成功",
+                data: user
+            })
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    /**
+     * 处理修改权限请求
      * @param {object} req 请求对象
      * @param {object} res 响应对象
      * @param {function} next 错误处理

@@ -55,6 +55,22 @@ class RegistrationController {
             next(error);
         }
     }
+
+    /**
+     * 处理根据活动ID查找所有报名用户的信息的请求
+     * @param {object} req 请求对象
+     * @param {object} res 响应对象
+     * @param {function} next 错误处理
+     */
+    async findUsersByActivityId(req, res, next) {
+        try {
+            const activityId = Number(req.params.id);
+            const users = await registrationService.findUsersByActivityId(activityId);
+            res.status(201).json(users);
+        } catch (error) {
+            next(error);
+        }
+    }
 }
 
 module.exports = new RegistrationController();

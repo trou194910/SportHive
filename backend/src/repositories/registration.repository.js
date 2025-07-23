@@ -48,6 +48,17 @@ class RegistrationRepository {
         const result = await db.query(query, [userId]);
         return result.rows;
     }
+
+    /**
+     * 根据活动ID查找所有报名用户的信息
+     * @param {number} activityId
+     * @return {Promise<Array<object>>}
+     */
+    async findUsersByActivityId(activityId) {
+        const query = 'SELECT u.id, u.username, u.email FROM registrations AS r JOIN users AS u ON r.user_id = u.id WHERE r.activity_id = $1';
+        const result = await db.query(query, [activityId]);
+        return result.rows;
+    }
 }
 
 module.exports = new RegistrationRepository();
