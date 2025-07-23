@@ -6,6 +6,9 @@ import RegistrationPage from '../pages/RegistrationPage';
 import CreateActivityPage from '../pages/CreateActivityPage';
 import MyActivityPage from '../pages/MyActivityPage';
 import EditActivityPage from '../pages/EditActivityPage';
+import ActivityDetailedPage from '../pages/ActivityDetailedPage';
+import MyCenterPage from '../pages/MyCenterPage';
+import ManagementPage from '../pages/ManagementPage';
 
 export default function AppRoutes() {
     return useRoutes([
@@ -32,6 +35,18 @@ export default function AppRoutes() {
                     path: '/activities/edit/:id',
                     element: <EditActivityPage/>
                 },
+                {
+                    path: '/activities/:id',
+                    element: <ActivityDetailedPage/>
+                },
+                {
+                    path: '/my-center',
+                    element: <MyCenterPage/>
+                },
+                {
+                    path: '/user-management',
+                    element: <ManagementPage/>
+                }
             ]
         }
     ]);

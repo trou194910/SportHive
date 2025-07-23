@@ -36,7 +36,9 @@ function Header() {
                                 <Button variant="outline">我的活动</Button>
                             </Link>
                             <div className="flex items-center space-x-9">
-                                <Button variant="outline">个人中心</Button>
+                                <Link to="/my-center">
+                                    <Button variant="outline">个人中心</Button>
+                                </Link>
                                 <Button variant="ghost" onClick={logout}>退出登录</Button>
                                 </div>
                         </>

@@ -1,33 +1,14 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
-import { getActivityStatus } from './ActivityCard';
+import { getActivityStatus, calculateDuration, formatFullDate } from '@/utils/activityUtils.js';
 import { Button } from './button';
 import apiClient from '../../services/apiClient';
 import { useAuth } from '../../context/AuthContext';
-
-const formatFullDate = (dateString) => {
-    if (!dateString) return '时间未知';
-    const date = new Date(dateString);
-    if (isNaN(date.getTime())) return '无效日期';
-    return date.toLocaleString('zh-CN', {
-        year: 'numeric', month: 'long', day: 'numeric',
-        hour: '2-digit', minute: '2-digit'
-    });
-};
-
-const calculateDuration = (start, end) => {
-    if (!start || !end) return '未知';
-    const diffMs = new Date(end) - new Date(start);
-    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-    const diffMinutes = Math.round((diffMs % (1000 * 60 * 60)) / (1000 * 60));
-    if (diffHours > 0) return `${diffHours}小时 ${diffMinutes}分钟`;
-    return `${diffMinutes}分钟`;
-};
+import { Link } from 'react-router-dom';
 
 export default function ActivityDetailModal({ activity, onClose }) {
     const { isLoggedIn, openLoginModal } = useAuth();
 
-    // 报名按钮的加载和错误状态
     const [isRegistering, setIsRegistering] = useState(false);
     const [registerError, setRegisterError] = useState(null);
 
@@ -96,7 +77,7 @@ export default function ActivityDetailModal({ activity, onClose }) {
                 </div>
 
                 {/* 底部操作区 */}
-                <div className="mt-8 pt-6 border-t flex flex-col items-center flex-shrink-0">
+                <div className="relative mt-8 pt-6 border-t flex flex-col items-center flex-shrink-0">
                     {registerError && <p className="text-red-500 text-sm mb-4">{registerError}</p>}
                     <Button
                         onClick={handleRegisterClick}
@@ -105,6 +86,17 @@ export default function ActivityDetailModal({ activity, onClose }) {
                     >
                         {isRegistering ? '报名中...' : (canRegister ? '立即报名' : '无法报名')}
                     </Button>
+                    <div className="absolute right-0">
+                        <Link
+                            to={`/activities/${activity.id}`}
+                            className="flex items-center gap-1 text-blue-600 hover:text-blue-800 font-medium transition-colors"
+                        >
+                            <span>查看更多</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                            </svg>
+                        </Link>
+                    </div>
                 </div>
             </div>
         </div>,

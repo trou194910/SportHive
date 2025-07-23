@@ -20,6 +20,7 @@ export default function LoginModal({ onClose }) {
         try {
             await login(str, password);
             navigate('/');
+            navigate(0);
         } catch (err) {
             setError(err.response?.data?.message || '登录失败，请检查您的凭据。');
         } finally {
