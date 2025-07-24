@@ -9,7 +9,7 @@ const app = express();
 app.use(cors({
     origin: 'http://localhost:5173',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'ngrok-skip-browser-warning'],
     optionsSuccessStatus: 200
 }));
 app.use(express.json());

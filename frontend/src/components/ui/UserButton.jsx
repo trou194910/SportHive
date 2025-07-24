@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react'; // 1. 引入 useRef
 import { useAuth } from '../../context/AuthContext';
 import apiClient from '../../services/apiClient';
 import { Button } from './button';
@@ -13,6 +13,8 @@ export default function UserButton({ description = '发布者', userId }) {
     const [isExpanded, setIsExpanded] = useState(false);
     const [isFollowing, setIsFollowing] = useState(false);
     const [isAlreadyFollowed, setIsAlreadyFollowed] = useState(false);
+    const containerRef = useRef(null);
+    const [isRightAligned, setIsRightAligned] = useState(false);
 
     useEffect(() => {
         if (!userId) {
@@ -75,6 +77,16 @@ export default function UserButton({ description = '发布者', userId }) {
 
     const handleMouseEnter = () => {
         clearTimeout(hideTimeoutId);
+        if (containerRef.current) {
+            const rect = containerRef.current.getBoundingClientRect();
+            const popoverWidth = 288;
+            const viewportWidth = window.innerWidth;
+            if (rect.left + popoverWidth > viewportWidth) {
+                setIsRightAligned(true);
+            } else {
+                setIsRightAligned(false);
+            }
+        }
         setIsExpanded(true);
     };
 
@@ -104,6 +116,7 @@ export default function UserButton({ description = '发布者', userId }) {
 
     return (
         <div
+            ref={containerRef}
             className="relative w-fit"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
@@ -119,7 +132,7 @@ export default function UserButton({ description = '发布者', userId }) {
 
             {/* 展开视图 */}
             {isExpanded && user && (
-                <div className="absolute top-full mt-2 w-72 bg-white rounded-lg shadow-xl border z-20 p-4">
+                <div className={`absolute top-full mt-2 w-72 bg-white rounded-lg shadow-xl border z-20 p-4 ${isRightAligned ? 'right-0' : 'left-0'}`}>
                     <div className="absolute top-4 right-4">
                         <Button
                             size="sm"
