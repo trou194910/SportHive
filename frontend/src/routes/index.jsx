@@ -9,6 +9,7 @@ import EditActivityPage from '../pages/EditActivityPage';
 import ActivityDetailedPage from '../pages/ActivityDetailedPage';
 import MyCenterPage from '../pages/MyCenterPage';
 import ManagementPage from '../pages/ManagementPage';
+import DeleteAccountPage from "@/pages/DeleteAccountPage.jsx";
 
 export default function AppRoutes() {
     return useRoutes([
@@ -46,6 +47,10 @@ export default function AppRoutes() {
                 {
                     path: '/user-management',
                     element: <ManagementPage/>
+                },
+                {
+                    path: '/users/delete',
+                    element: <DeleteAccountPage/>
                 }
             ]
         }

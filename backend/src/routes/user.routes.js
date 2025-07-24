@@ -56,9 +56,9 @@ router.get('/:id', authMiddleware, userController.findUser);
 
 /**
  * @description 定义用户删除路由
- * @method DELETE /api/users/:id
+ * @method POST /api/users/:id
  */
-router.delete('/:id', authMiddleware, userController.deleteUser);
+router.post('/:id', authMiddleware, userController.deleteUser);
 
 /**
  * @description 获取某个用户的所有评论

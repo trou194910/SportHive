@@ -34,9 +34,9 @@ export default function ProfilePage() {
     const [comments, setComments] = useState([]);
     const [commentsLoading, setCommentsLoading] = useState(true);
     const [commentsError, setCommentsError] = useState('');
-    const [editingCommentId, setEditingCommentId] = useState(null); // 正在编辑的评论ID
-    const [editingText, setEditingText] = useState(''); // 编辑中的文本
-    const [processingCommentId, setProcessingCommentId] = useState(null); // 正在更新或删除的评论ID
+    const [editingCommentId, setEditingCommentId] = useState(null);
+    const [editingText, setEditingText] = useState('');
+    const [processingCommentId, setProcessingCommentId] = useState(null);
 
     useEffect(() => {
         if (!user) {
@@ -98,20 +98,7 @@ export default function ProfilePage() {
     };
 
     const handleDeleteAccount = async () => {
-        if (window.confirm("确定要永久删除您的账号吗？此操作不可撤销。")) {
-            setIsDeleting(true);
-            try {
-                await apiClient.delete(`/users/${user.id}`);
-                alert("账号已成功删除。");
-                logout();
-                navigate('/login');
-            } catch (err) {
-                console.error("删除账号失败:", err);
-                alert("删除账号失败，请稍后重试。");
-            } finally {
-                setIsDeleting(false);
-            }
-        }
+        navigate("/users/delete");
     };
 
     const handleStartEdit = (comment) => {
