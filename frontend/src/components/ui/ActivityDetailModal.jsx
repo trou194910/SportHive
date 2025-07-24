@@ -5,6 +5,7 @@ import { Button } from './button';
 import apiClient from '../../services/apiClient';
 import { useAuth } from '../../context/AuthContext';
 import { Link } from 'react-router-dom';
+import UserButton from "@/components/ui/UserButton.jsx";
 
 export default function ActivityDetailModal({ activity, onClose }) {
     const { isLoggedIn, openLoginModal } = useAuth();
@@ -49,7 +50,7 @@ export default function ActivityDetailModal({ activity, onClose }) {
                     <h2 className="text-3xl font-bold text-gray-900">{activity.name}</h2>
                     <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">{activity.type}</span>
                     <div className="flex-grow"></div>
-                    <Button variant="link">发布者: 用户ID {activity.organizer_id}</Button>
+                    <UserButton description="发布者" userId={activity.organizer_id} />
                 </div>
 
                 {/* 描述 */}

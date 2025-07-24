@@ -68,15 +68,19 @@ export default function FollowedActivitiesPanel() {
 
     return (
         <>
-            <div className="p-4 space-y-4">
-                <h2 className="text-2xl font-bold text-gray-800">我关注的活动</h2>
-                {activities.map(activity => (
-                    <ActivityCard
-                        key={activity.id}
-                        activity={activity}
-                        onCardClick={handleViewDetails}
-                    />
-                ))}
+            <div className="flex flex-col h-full p-4">
+                <h2 className="text-2xl font-bold text-gray-800 mb-4 flex-shrink-0">
+                    我关注的活动
+                </h2>
+                <div className="flex-1 overflow-y-auto space-y-4 pr-2">
+                    {activities.map(activity => (
+                        <ActivityCard
+                            key={activity.id}
+                            activity={activity}
+                            onCardClick={handleViewDetails}
+                        />
+                    ))}
+                </div>
             </div>
             {/* 详情弹窗 */}
             <ActivityDetailModal

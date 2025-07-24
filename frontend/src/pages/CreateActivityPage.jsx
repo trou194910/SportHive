@@ -93,9 +93,9 @@ export default function CreateActivityPage() {
     };
 
     return (
-        <div className="pt-16 bg-gray-50/50 min-h-screen">
-            <div className="container mx-auto px-4 py-10">
-                <div className="max-w-3xl mx-auto bg-white p-8 rounded-2xl shadow-lg border border-gray-200">
+        <div className="pt-16 bg-gray-50/50 flex flex-col h-screen">
+            <div className="container mx-auto px-4 py-10 flex-1 overflow-hidden">
+                <div className="max-w-4xl mx-auto bg-white p-8 rounded-2xl shadow-lg border border-gray-200 h-full overflow-y-auto">
                     <div className="text-center mb-8">
                         <h1 className="text-3xl font-bold text-gray-800">发布新活动</h1>
                     </div>

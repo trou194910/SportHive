@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button } from './button';
 import { getActivityStatus, calculateDuration } from '@/utils/activityUtils.js';
+import UserButton from "@/components/ui/UserButton.jsx";
 
 const formatDetailedTime = (dateString) => {
     if (!dateString) return '时间未知';
@@ -17,10 +17,6 @@ const formatDetailedTime = (dateString) => {
 
 export default function ActivityCardPlus({ activity, onCardClick }) {
     const status = getActivityStatus(activity);
-    const handleOrganizerClick = (e) => {
-        e.stopPropagation();
-        console.log("查看发布者:", activity.organizer_id);
-    };
 
     return (
         <div
@@ -41,13 +37,7 @@ export default function ActivityCardPlus({ activity, onCardClick }) {
                         <span className={`px-2 py-1 rounded-full font-semibold ${status.className}`}>
                             {status.text}
                         </span>
-                        <Button
-                            variant="link"
-                            className="p-0 h-auto text-xs text-blue-600 hover:underline"
-                            onClick={handleOrganizerClick}
-                        >
-                            发布者: {activity.organizer_name || `用户ID ${activity.organizer_id}`}
-                        </Button>
+                        <UserButton description="发布者" userId={activity.organizer_id} />
                     </div>
                 </div>
             </div>

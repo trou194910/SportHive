@@ -44,7 +44,6 @@ export default function UserButton({ description = '发布者', userId }) {
 
     useEffect(() => {
         if (isInitialized) {
-            console.log(currentUser);
             if (currentUser && currentUser.follows && userId) {
                 const followedIdsAsString = currentUser.follows.map(id => String(id));
                 const isFollowed = followedIdsAsString.includes(String(userId));
@@ -90,7 +89,7 @@ export default function UserButton({ description = '发布者', userId }) {
         return (
             <div className="flex items-center gap-1 p-1 rounded-lg bg-gray-200 border">
                 <div className="text-xs font-semibold text-gray-500 whitespace-nowrap pl-1">
-                    {description}:
+                    {description}
                 </div>
                 <div className="px-2 py-0.5 rounded-md bg-gray-400 text-white text-xs text-center font-bold">
                     ...
@@ -111,7 +110,7 @@ export default function UserButton({ description = '发布者', userId }) {
         >
             <div className="flex items-center gap-1 p-1 rounded-lg bg-pink-100 border border-pink-200 shadow-sm">
                 <div className="text-xs font-semibold text-pink-700 whitespace-nowrap pl-1">
-                    {description}:
+                    {description}
                 </div>
                 <div className="px-2 py-0.5 rounded-md bg-pink-500 text-white text-xs text-center font-bold truncate">
                     {loading ? '加载中...' : (user?.username || '未知用户')}
