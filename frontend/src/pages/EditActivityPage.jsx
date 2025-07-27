@@ -93,8 +93,8 @@ export default function EditActivityPage() {
                 description: formData.description,
                 location: formData.location,
                 type: formData.type,
-                startTime: new Date(formData.start_time).toISOString(),
-                endTime: new Date(formData.end_time).toISOString(),
+                start_time: new Date(formData.start_time).toISOString(),
+                end_time: new Date(formData.end_time).toISOString(),
                 capacity: parseInt(formData.capacity, 10),
             };
 

@@ -21,6 +21,8 @@ export default function ActivityDetailPage() {
     const [isSubmittingComment, setIsSubmittingComment] = useState(false);
     const [isRegistering, setIsRegistering] = useState(false);
     const [registerError, setRegisterError] = useState(null);
+    const [isRegistered, setIsRegistered] = useState(false);
+    const [isLoadingStatus, setIsLoadingStatus] = useState(true);
     const [isDeleting, setIsDeleting] = useState(false);
 
     const fetchData = useCallback(async () => {
@@ -35,7 +37,6 @@ export default function ActivityDetailPage() {
             const fetchedComments = commentsRes.data;
             setComments(fetchedComments.slice().reverse());
             setRegistrations(registrationsRes.data);
-
         } catch (err) {
             console.error("加载活动详情失败:", err);
             setError("无法加载活动详情，请稍后重试。");
@@ -46,6 +47,29 @@ export default function ActivityDetailPage() {
             setLoading(false);
         }
     }, [id, navigate]);
+
+    useEffect(() => {
+        if (isLoggedIn && id) {
+            setIsLoadingStatus(true);
+            const checkRegistrationStatus = async () => {
+                try {
+                    const response = await apiClient.get(`/activities/${id}/register`);
+                    if (response.data) {
+                        setIsRegistered(response.data.isRegistered);
+                    }
+                } catch (error) {
+                    console.error("无法获取报名状态:", error);
+                    setIsRegistered(false);
+                } finally {
+                    setIsLoadingStatus(false);
+                }
+            };
+            checkRegistrationStatus();
+        } else {
+            setIsLoadingStatus(false);
+            setIsRegistered(false);
+        }
+    }, [id, isLoggedIn]);
 
     useEffect(() => {
         fetchData();
@@ -59,7 +83,6 @@ export default function ActivityDetailPage() {
             openLoginModal();
             return;
         }
-
         setIsSubmittingComment(true);
         try {
             await apiClient.post(`/activities/${id}/comments`, { content: newComment });
@@ -78,12 +101,12 @@ export default function ActivityDetailPage() {
             openLoginModal();
             return;
         }
-
         setIsRegistering(true);
         setRegisterError(null);
         try {
             await apiClient.post(`/activities/${id}/register`);
             alert('报名成功！');
+            setIsRegistered(true);
             await fetchData();
         } catch (err) {
             console.error("报名失败:", err);
@@ -99,7 +122,7 @@ export default function ActivityDetailPage() {
             try {
                 await apiClient.delete(`/activities/${id}`);
                 alert('活动删除成功！');
-                navigate('/activities');
+                navigate(-1);
             } catch (err) {
                 console.error("删除活动失败:", err);
                 alert("删除失败：" + (err.response?.data?.message || '请稍后重试'));
@@ -162,7 +185,7 @@ export default function ActivityDetailPage() {
                             <div className="space-y-5">
                                 {comments.length > 0 ? comments.map(comment => (
                                     <div key={comment.id} className="flex items-start space-x-3">
-                                        <UserButton userId={comment.user_id} description="" />
+                                        <UserButton userId={comment.user_id} userName={comment.user_name} />
                                         <div className="flex-1">
                                             <div className="flex items-center space-x-2">
                                                 <span className="text-xs text-gray-500">{formatRelativeTime(comment.created_at)}</span>
@@ -183,7 +206,7 @@ export default function ActivityDetailPage() {
                                 <div className="space-y-4">
                                     <div className="flex justify-between items-center"><span className="text-gray-600">当前状态</span><span className={`px-2 py-1 text-xs font-bold rounded-full ${status.className}`}>{status.text}</span></div>
                                     <div className="flex justify-between items-center"><span className="text-gray-600">参与人数</span><div className="flex items-center space-x-1 text-gray-800"><Users className="h-5 w-5" /><span className="font-medium">{activity.participants} / {activity.capacity}</span></div></div>
-                                    <div className="flex justify-between items-center"><span className="text-gray-600">发布者</span><UserButton userId={activity.organizer_id} description="发布者" /></div>
+                                    <div className="flex justify-between items-center"><span className="text-gray-600">发布者</span><UserButton userId={activity.organizer_id} userName={activity.organizer_name} /></div>
                                     <div className="flex justify-between items-center"><span className="text-gray-600">发布于</span><span className="font-medium text-gray-800">{formatRelativeTime(activity.created_at)}</span></div>
 
                                     <div className="pt-4 border-t border-gray-200">
@@ -191,7 +214,7 @@ export default function ActivityDetailPage() {
                                         {registrations.length > 0 ? (
                                             <div className="flex flex-wrap gap-2">
                                                 {registrations.map(reg => (
-                                                    <UserButton key={reg.id} userId={reg.id} description="" />
+                                                    <UserButton key={reg.id} userId={reg.id} userName={reg.name} />
                                                 ))}
                                             </div>
                                         ) : <p className="text-sm text-gray-500">暂无用户报名</p>}
@@ -201,17 +224,26 @@ export default function ActivityDetailPage() {
 
                             {/* 操作按钮区域 */}
                             <div className="mt-6 pt-6 border-t border-gray-200 text-center space-y-3">
+                                {registerError && <p className="text-red-500 text-sm mb-2">{registerError}</p>}
+                                {isLoadingStatus ? (
+                                    <Button disabled className="w-full py-2.5 text-base font-semibold bg-gray-400 cursor-not-allowed">加载状态...</Button>
+                                ) : isOrganizer ? (
+                                    <Button disabled className="w-full py-2.5 text-base font-semibold bg-gray-400 cursor-not-allowed">我发布的活动</Button>
+                                ) : isRegistered ? (
+                                    <Button disabled className="w-full py-2.5 text-base font-semibold bg-gray-400 cursor-not-allowed">您已报名</Button>
+                                ) : !canRegister ? (
+                                    <Button disabled className="w-full py-2.5 text-base font-semibold bg-gray-400 cursor-not-allowed">无法报名</Button>
+                                ) :  (
+                                    <Button
+                                        onClick={handleRegisterClick}
+                                        disabled={isRegistering}
+                                        className="w-full py-2.5 text-base font-semibold bg-orange-500 hover:bg-orange-600"
+                                    >
+                                        {isRegistering ? '报名中...' : '立即报名'}
+                                    </Button>
+                                )}
                                 {isOrganizer ? (
                                     <>
-                                        {registerError && <p className="text-red-500 text-sm mb-2">{registerError}</p>}
-                                        <Button
-                                            onClick={handleRegisterClick}
-                                            disabled={!canRegister || isRegistering}
-                                            className={`w-full py-2.5 text-base font-semibold ${!canRegister ? 'bg-gray-400 cursor-not-allowed' : 'bg-orange-500 hover:bg-orange-600'}`}
-                                        >
-                                            {isRegistering ? '报名中...' : (canRegister ? '立即报名' : '无法报名')}
-                                        </Button>
-                                        <>
                                             <div className="relative py-2">
                                                 <div className="absolute inset-0 flex items-center"><span className="w-full border-t"></span></div>
                                                 <div className="relative flex justify-center text-xs uppercase"><span className="bg-white px-2 text-gray-500">发布者操作</span></div>
@@ -230,19 +262,9 @@ export default function ActivityDetailPage() {
                                             >
                                                 {isDeleting ? '删除中...' : '删除活动'}
                                             </Button>
-                                        </>
                                     </>
-                                ) : (
+                                    ) : (
                                     <>
-                                        {registerError && <p className="text-red-500 text-sm mb-2">{registerError}</p>}
-                                        <Button
-                                            onClick={handleRegisterClick}
-                                            disabled={!canRegister || isRegistering}
-                                            className={`w-full py-2.5 text-base font-semibold ${!canRegister ? 'bg-gray-400 cursor-not-allowed' : 'bg-orange-500 hover:bg-orange-600'}`}
-                                        >
-                                            {isRegistering ? '报名中...' : (canRegister ? '立即报名' : '无法报名')}
-                                        </Button>
-
                                         {isAdmin && (
                                             <>
                                                 <div className="relative py-2">

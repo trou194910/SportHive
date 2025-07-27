@@ -50,7 +50,7 @@ const UserItem = ({ user, currentUser, onUpdatePermission, isProcessing }) => {
         <li className="p-4 rounded-lg bg-gray-50 border">
             {/* 第一行：用户名和权限按钮 */}
             <div className="flex flex-wrap items-center justify-between gap-y-3 mb-3">
-                <h3 className="font-bold text-lg text-gray-900">{user.username}</h3>
+                <h3 className="font-bold text-lg text-gray-900">{user.name}</h3>
                 <div className="flex items-center gap-x-2 flex-wrap gap-y-2">
                     {PERMISSION_LEVELS.map(p => {
                         const isActive = user.permission === p.level;
@@ -137,13 +137,11 @@ export default function ManagementPage() {
         }
     };
 
-    // 处理删除活动
     const handleDelete = async (activityId) => {
         if (window.confirm("确定要永久删除这个活动吗？")) {
             setProcessingId(activityId);
             try {
                 await apiClient.delete(`/activities/${activityId}`);
-                // 成功后，从前端列表中移除该活动
                 setActivities(prevActivities => prevActivities.filter(a => a.id !== activityId));
             } catch (err) {
                 console.error("删除活动失败:", err);
@@ -164,7 +162,7 @@ export default function ManagementPage() {
             fetchUsers();
         } catch (err) {
             console.error("更新用户权限失败:", err);
-            alert("操作失败，该用户权限可能高于或等于您。");
+            alert("操作失败，该权限可能高于或等于您。");
         } finally {
             setProcessingUserId(null);
         }

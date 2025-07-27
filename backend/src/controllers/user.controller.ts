@@ -44,10 +44,7 @@ class UserController {
                 identifier,
                 password: password,
             });
-            res.status(200).json({
-                message: '登录成功',
-                data: loginResult,
-            });
+            res.status(200).json(loginResult);
         } catch (error) {
             next(error);
         }

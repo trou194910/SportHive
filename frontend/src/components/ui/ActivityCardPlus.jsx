@@ -37,7 +37,7 @@ export default function ActivityCardPlus({ activity, onCardClick }) {
                         <span className={`px-2 py-1 rounded-full font-semibold ${status.className}`}>
                             {status.text}
                         </span>
-                        <UserButton description="发布者" userId={activity.organizer_id} />
+                        <UserButton userId={activity.organizer_id} userName={activity.organizer_name} />
                     </div>
                 </div>
             </div>

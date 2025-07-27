@@ -57,7 +57,7 @@ export default function ActivityCard({ activity, onCardClick }) {
                 {/* 描述 */}
                 <p className="pt-1">{truncateText(activity.description, 70)}</p>
                 {/* 发布者 */}
-                <UserButton description="发布者" userId={activity.organizer_id} />
+                <UserButton userId={activity.organizer_id} userName={activity.organizer_name} />
             </div>
         </div>
     );

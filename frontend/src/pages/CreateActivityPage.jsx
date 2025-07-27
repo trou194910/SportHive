@@ -77,8 +77,8 @@ export default function CreateActivityPage() {
         try {
             const submissionData = {
                 ...formData,
-                startTime: new Date(formData.start_time).toISOString(),
-                endTime: new Date(formData.end_time).toISOString(),
+                start_time: new Date(formData.start_time).toISOString(),
+                end_time: new Date(formData.end_time).toISOString(),
                 capacity: parseInt(formData.capacity, 10),
             };
             await apiClient.post('/activities', submissionData);

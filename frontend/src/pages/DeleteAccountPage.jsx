@@ -10,7 +10,7 @@ export default function DeleteAccountPage() {
     const { logout } = useAuth();
 
     const [formData, setFormData] = useState({
-        username: '',
+        name: '',
         password: '',
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -32,7 +32,7 @@ export default function DeleteAccountPage() {
         setError('');
         try {
             await apiClient.post('/users/delete', {
-                username: formData.username,
+                identifier: formData.username,
                 password: formData.password,
             });
             alert('账号已成功删除。再见！');
@@ -58,7 +58,7 @@ export default function DeleteAccountPage() {
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
                         <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
-                            用户名
+                            用户名或邮箱
                         </label>
                         <Input
                             id="username"

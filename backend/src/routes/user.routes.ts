@@ -41,7 +41,7 @@ userRoutes.get(
  * @desc   获取某个用户已经报名的活动列表
  */
 userRoutes.get(
-    '/registration',
+    '/registrations',
     isAuthenticated,
     registrationController.getRegisteredActivities
 )

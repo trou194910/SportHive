@@ -1,7 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import apiClient from '../services/apiClient';
 
-const AuthContext = createContext();
+const AuthContext = createContext(undefined);
 
 export function AuthProvider({ children }) {
     const [isInitialized, setIsInitialized] = useState(false);
@@ -44,8 +44,9 @@ export function AuthProvider({ children }) {
     const openLoginModal = () => setIsLoginModalOpen(true);
     const closeLoginModal = () => setIsLoginModalOpen(false);
 
-    const login = async (str, password) => {
-        const response = await apiClient.post('/users/login', { str, password });
+    const login = async (identifier, password) => {
+        const response = await apiClient.post('/users/login', { identifier, password });
+        console.log(response);
         const { user, token } = response.data;
         setUser(user);
         setToken(token);

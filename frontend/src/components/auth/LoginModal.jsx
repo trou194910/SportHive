@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { useAuth } from '../../context/AuthContext';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 
 export default function LoginModal({ onClose }) {
     const { login } = useAuth();
     const navigate = useNavigate();
-    const [str, setStr] = useState('');
+    const [identifier, setIdentifier] = useState('');
     const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -18,7 +18,7 @@ export default function LoginModal({ onClose }) {
         setError(null);
         setIsLoading(true);
         try {
-            await login(str, password);
+            await login(identifier, password);
             navigate('/');
             navigate(0);
         } catch (err) {
@@ -59,8 +59,8 @@ export default function LoginModal({ onClose }) {
                         <label htmlFor="login-str" className="block text-sm font-medium text-gray-700 mb-1">用户名或邮箱</label>
                         <Input
                             id="login-str"
-                            value={str}
-                            onChange={(e) => setStr(e.target.value)}
+                            value={identifier}
+                            onChange={(e) => setIdentifier(e.target.value)}
                             type="text"
                             placeholder="输入您的用户名或邮箱"
                             required

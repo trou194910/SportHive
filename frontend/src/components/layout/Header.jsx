@@ -31,7 +31,7 @@ function Header() {
                     {isLoggedIn ? (
                         <>
                             {/* 如果用户存在，显示用户名 */}
-                            {user && <span className="text-sm text-gray-700">欢迎，{user.username} !</span>}
+                            {user && <span className="text-sm text-gray-700">欢迎，{user.name} !</span>}
                             <Link to="/my-activity">
                                 <Button variant="outline">我的活动</Button>
                             </Link>

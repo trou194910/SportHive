@@ -9,7 +9,7 @@ import apiClient from '../services/apiClient';
 function RegistrationPage() {
     const navigate = useNavigate();
     const { openLoginModal } = useAuth();
-    const [username, setUsername] = useState('');
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -27,7 +27,7 @@ function RegistrationPage() {
         setIsLoading(true);
 
         try {
-            const userData = { username, email, password };
+            const userData = { name: name, email, password };
             const response = await apiClient.post('/users/register', userData);
             console.log('注册成功:', response.data);
             alert('注册成功！即将跳转到登录页面。');
@@ -62,8 +62,8 @@ function RegistrationPage() {
                         <form className="space-y-4" onSubmit={handleSubmit}>
                             {/* 将每个输入框和它的状态绑定 */}
                             <div>
-                                <label htmlFor="username" className="block text-sm font-medium text-gray-700">用户名</label>
-                                <Input value={username} onChange={(e) => setUsername(e.target.value)} id="username" type="text" placeholder="设置一个独特的用户名" required />
+                                <label htmlFor="name" className="block text-sm font-medium text-gray-700">用户名</label>
+                                <Input value={name} onChange={(e) => setName(e.target.value)} id="name" type="text" placeholder="设置一个独特的用户名" required />
                             </div>
                             <div>
                                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">邮箱地址</label>

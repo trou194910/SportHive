@@ -5,8 +5,6 @@
   "type": "module",
   "scripts": {
     "dev:frontend": "vite",
-    "dev:backend": "nodemon ../backend/index.js",
-    "dev": "concurrently \"npm:dev:frontend\" \"npm:dev:backend\"",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
