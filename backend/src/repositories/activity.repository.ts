@@ -217,7 +217,7 @@ class ActivityRepository {
         const sql = `
             UPDATE activities 
             SET "condition" = ? 
-            WHERE start_time < datetime('now') AND "condition" != ?
+            WHERE strftime('%Y-%m-%d %H:%M:%S', start_time) < datetime('now') AND "condition" != ?
             `;
         const stmt = db.prepare(sql);
         const info = stmt.run(ActivityCondition.Finished, ActivityCondition.Finished);
